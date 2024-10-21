@@ -1,7 +1,7 @@
 ---
 
 Temp&Hum:
-  SIG: 4
+  SIG: "D4"
 Relay:
   IN1: 5
   IN2: 6
