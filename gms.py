@@ -16,7 +16,10 @@ class GMS:
         #GPIO Mode BCM - GPIO numbering
         dht_pin = cfg["Temp&Hum"]["SIG"]
         self.dht= adafruit_dht.DHT11(getattr(board, dht_pin))
-        
+        self.TRIG_PIN = cfg["Sonar"]["TRIG"]
+        self.ECHO_PIN = cfg["Sonar"]["ECHO"]
+        GPIO.setup(self.TRIG_PIN, GPIO.OUT)
+        GPIO.setup(self.ECHO_PIN, GPIO.IN)
         self.picam2 = Picamera2()
         #capture_config = picam2.create_still_configuration()
         #self.picam2 = self.picam2.configure(capture_config)
@@ -32,6 +35,25 @@ class GMS:
         timestamp = time.strftime("%Y%m%d_%H%M%S")
         uid = uuid.uuid4()
         self.picam2.capture_file(f"timelapse/{timestamp}-{uid}.jpg")
+
+    def get_distance(self):
+        GPIO.output(self.TRIG_PIN, GPIO.HIGH)
+        time.sleep(0.00001)
+        GPIO.output(self.TRIG_PIN, GPIO.LOW)
+
+        # Measure the duration for the echo pulse
+        while GPIO.input(self.ECHO_PIN) == 0:
+            pulse_start = time.time()
+
+        while GPIO.input(self.ECHO_PIN) == 1:
+            pulse_end = time.time()
+
+        pulse_duration = pulse_end - pulse_start
+
+        # Calculate the distance based on the speed of sound (34300 cm/s)
+        distance = pulse_duration * 34300 / 2
+
+        return distance
 
 if __name__ == "__main__":
     print(cfg)
