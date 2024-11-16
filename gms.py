@@ -77,7 +77,9 @@ class GMS:
 if __name__ == "__main__":
     print(cfg)
     gms1 = GMS()
-    print(gms1.get_temp_hum())
+    print("Temp and Humidity",gms1.get_temp_hum())
     gms1.get_camera()
-    gms1.get_distance()
-    gms1.relay_WaterON(1200)
+    print(gms1.get_distance(), "cm")
+    print("Relay Test")
+    gms1.relay_WaterON(4)
+    print("Realy End")
