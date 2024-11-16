@@ -23,6 +23,10 @@ class GMS:
         self.picam2 = Picamera2()
         #capture_config = picam2.create_still_configuration()
         #self.picam2 = self.picam2.configure(capture_config)
+        self.RELAY_IN1 = cfg["Relay"]["IN1"]
+        self.RELAY_IN2 = cfg["Relay"]["IN2"]
+        GPIO.setup(self.RELAY_IN1, GPIO.OUT)
+        GPIO.setup(self.RELAY_IN2, GPIO.OUT)
 
     def get_temp_hum(self):
         #humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, self.dht)
@@ -49,14 +53,25 @@ class GMS:
             pulse_end = time.time()
 
         pulse_duration = pulse_end - pulse_start
-
         # Calculate the distance based on the speed of sound (34300 cm/s)
         distance = pulse_duration * 34300 / 2
 
         return distance
+
+    def relay_WaterON(self, duration:int):
+        GPIO.output(self.RELAY_IN1, GPIO.LOW)
+        time.sleep(duration)
+        GPIO.output(self.RELAY_IN1, GPIO.HIGH)
+        return True
+
+    def relay_FanON(self, duration:int):
+        GPIO.output(self.RELAY_IN2, GPIO.LOW)
+        time.sleep(duration)
+        GPIO.output(self.RELAY_IN2, GPIO.HIGH)
 
 if __name__ == "__main__":
     print(cfg)
     gms1 = GMS()
     print(gms1.get_temp_hum())
     gms1.get_camera()
+    gms1.get_distance()
