@@ -58,16 +58,21 @@ class GMS:
 
         return distance
 
-    def relay_WaterON(self, duration:int):
+    def relay_WaterON(self, duration: int):
         GPIO.output(self.RELAY_IN1, GPIO.LOW)
         time.sleep(duration)
         GPIO.output(self.RELAY_IN1, GPIO.HIGH)
         return True
 
-    def relay_FanON(self, duration:int):
+    def relay_FanON(self, duration: int):
         GPIO.output(self.RELAY_IN2, GPIO.LOW)
         time.sleep(duration)
         GPIO.output(self.RELAY_IN2, GPIO.HIGH)
+        return True
+
+    def soilMoisture(self):
+        #GPIO.input()
+        return False
 
 if __name__ == "__main__":
     print(cfg)
@@ -75,3 +80,4 @@ if __name__ == "__main__":
     print(gms1.get_temp_hum())
     gms1.get_camera()
     gms1.get_distance()
+    gms1.relay_WaterON(1200)

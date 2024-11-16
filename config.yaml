@@ -8,3 +8,5 @@ Relay:
 Sonar:
   TRIG: 23
   ECHO: 24
+Soil:
+  DO:
