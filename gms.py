@@ -95,5 +95,6 @@ if __name__ == "__main__":
     print("Relay Test")
     gms1.relay_WaterON(4)
     print("Relay End")
+    gmsl.readLight(1)
     
     
