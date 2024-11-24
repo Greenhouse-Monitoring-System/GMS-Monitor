@@ -10,3 +10,5 @@ Sonar:
   ECHO: 24
 Soil:
   DO:
+Light:
+  IN1: 7

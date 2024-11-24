@@ -6,6 +6,7 @@ import adafruit_dht
 import board
 from picamera2 import Picamera2
 import uuid
+from PiAnalog import *
 #import Adafruit_DHT
 
 with open("config.yaml") as f:
@@ -27,6 +28,9 @@ class GMS:
         self.RELAY_IN2 = cfg["Relay"]["IN2"]
         GPIO.setup(self.RELAY_IN1, GPIO.OUT)
         GPIO.setup(self.RELAY_IN2, GPIO.OUT)
+        #set up light pin
+        self.LIGHT_INPUT = cfg["Light"]["IN1"]
+        GPIO.setup(self.LIGHT_INPUT, GPIO.IN)
 
     def get_temp_hum(self):
         #humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, self.dht)
@@ -74,6 +78,14 @@ class GMS:
         #GPIO.input()
         return False
 
+    def readLight(self, threshold: int):
+        print("Reading Light levels")
+        #Need to convert from analog to digital at some point from
+        #what I can figure out - most examples online used MCP3008
+
+        return GPIO.input(self.LIGHT_INPUT)
+        
+
 if __name__ == "__main__":
     print(cfg)
     gms1 = GMS()
@@ -82,4 +94,6 @@ if __name__ == "__main__":
     print(gms1.get_distance(), "cm")
     print("Relay Test")
     gms1.relay_WaterON(4)
-    print("Realy End")
+    print("Relay End")
+    
+    
