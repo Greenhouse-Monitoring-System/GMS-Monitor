@@ -23,6 +23,7 @@ greenhouse_data = {
 # Route: Get all sensor data
 @app.route('/api/sensors', methods=['GET'])
 def get_sensor_data():
+    global greenhouse_data
     return jsonify(greenhouse_data['sensors']), 200
 
 # Route: Update specific sensor data (mock update)
