@@ -27,6 +27,8 @@ class GMS:
         self.RELAY_IN2 = cfg["Relay"]["IN2"]
         GPIO.setup(self.RELAY_IN1, GPIO.OUT)
         GPIO.setup(self.RELAY_IN2, GPIO.OUT)
+        GPIO.output(self.RELAY_IN1, GPIO.LOW)
+        GPIO.output(self.RELAY_IN2, GPIO.LOW)
 
     def get_temp_hum(self):
         #humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, self.dht)
