@@ -20,11 +20,34 @@ greenhouse_data = {
     },
 }
 
-# Route: Get all sensor data
+# Route: Get all sensor data from the database
 @app.route('/api/sensors', methods=['GET'])
 def get_sensor_data():
-    global greenhouse_data
-    return jsonify(greenhouse_data['sensors']), 200
+    try:
+        conn = sqlite3.connect("greenhouse.db")
+        cursor = conn.cursor()
+
+        # Query the latest sensor data
+        cursor.execute("""
+        SELECT timestamp, temperature, humidity, distance 
+        FROM sensor_data 
+        ORDER BY id DESC LIMIT 1
+        """)
+        row = cursor.fetchone()
+        conn.close()
+
+        if row:
+            timestamp, temperature, humidity, distance = row
+            return jsonify({
+                "timestamp": timestamp,
+                "temperature": temperature,
+                "humidity": humidity,
+                "distance": distance
+            }), 200
+        else:
+            return jsonify({"error": "No sensor data available"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Route: Update specific sensor data (mock update)
 @app.route('/api/sensors/<sensor_name>', methods=['PUT'])

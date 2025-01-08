@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5075bb4-0e50-487b-943c-ef8749c3188a" name="Changes" comment="Control REST API">
+    <list default="true" id="e5075bb4-0e50-487b-943c-ef8749c3188a" name="Changes" comment="Bug in Thread Sensor Monitoring">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,7 +100,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736353675530</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Bug in Thread Sensor Monitoring">
+      <option name="closed" value="true" />
+      <created>1736354390445</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1736354390445</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -120,6 +128,7 @@
     <MESSAGE value="Added empty func for mositure sensor" />
     <MESSAGE value="ff" />
     <MESSAGE value="Control REST API" />
-    <option name="LAST_COMMIT_MESSAGE" value="Control REST API" />
+    <MESSAGE value="Bug in Thread Sensor Monitoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bug in Thread Sensor Monitoring" />
   </component>
 </project>
