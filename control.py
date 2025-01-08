@@ -1,0 +1,122 @@
+from flask import Flask, request, jsonify
+import threading
+import time
+from gms import GMS
+import sqlite3
+
+app = Flask(__name__)
+
+# Mock database for REST API
+greenhouse_data = {
+    "sensors": {
+        "temperature": 25.5,
+        "humidity": 60,
+        "soil_moisture": 40,
+        "light": 300,
+    },
+    "controls": {
+        "water_pump": "OFF",
+        "ventilation": "OFF",
+    },
+}
+
+# Route: Get all sensor data
+@app.route('/api/sensors', methods=['GET'])
+def get_sensor_data():
+    return jsonify(greenhouse_data['sensors']), 200
+
+# Route: Update specific sensor data (mock update)
+@app.route('/api/sensors/<sensor_name>', methods=['PUT'])
+def update_sensor_data(sensor_name):
+    if sensor_name in greenhouse_data['sensors']:
+        data = request.json
+        greenhouse_data['sensors'][sensor_name] = data.get('value', greenhouse_data['sensors'][sensor_name])
+        return jsonify({sensor_name: greenhouse_data['sensors'][sensor_name]}), 200
+    return jsonify({"error": "Sensor not found"}), 404
+
+# Route: Get control device status
+@app.route('/api/controls', methods=['GET'])
+def get_controls():
+    return jsonify(greenhouse_data['controls']), 200
+
+# Route: Update control device state
+@app.route('/api/controls/<device_name>', methods=['PUT'])
+def update_control(device_name):
+    if device_name in greenhouse_data['controls']:
+        data = request.json
+        greenhouse_data['controls'][device_name] = data.get('state', greenhouse_data['controls'][device_name])
+        return jsonify({device_name: greenhouse_data['controls'][device_name]}), 200
+    return jsonify({"error": "Device not found"}), 404
+
+# Route: Ping (for health check)
+@app.route('/api/ping', methods=['GET'])
+def ping():
+    return jsonify({"message": "Greenhouse API is up and running!"}), 200
+
+# Database setup
+def init_db():
+    conn = sqlite3.connect("greenhouse.db")
+    cursor = conn.cursor()
+    # Create a table to store sensor data
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS sensor_data (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        timestamp TEXT NOT NULL,
+        temperature REAL,
+        humidity REAL,
+        distance REAL
+    )
+    """)
+    conn.commit()
+    conn.close()
+
+# Function to save data to the database
+def save_to_db(temperature, humidity, distance):
+    conn = sqlite3.connect("greenhouse.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+    INSERT INTO sensor_data (timestamp, temperature, humidity, distance)
+    VALUES (datetime('now'), ?, ?, ?)
+    """, (temperature, humidity, distance))
+    conn.commit()
+    conn.close()
+
+# Sensor monitoring function
+def monitor_sensors():
+    gms = GMS()  # Initialize the GMS object
+
+    while True:
+        try:
+            # Get temperature and humidity
+            humidity, temperature = gms.get_temp_hum()
+
+            # Get distance from sonar sensor
+            distance = gms.get_distance()
+
+            # Save data to the database
+            save_to_db(temperature, humidity, distance)
+
+            # Update mock database for REST API
+            greenhouse_data['sensors']['temperature'] = temperature
+            greenhouse_data['sensors']['humidity'] = humidity
+            greenhouse_data['sensors']['distance'] = distance
+
+            print(f"Saved: Temp={temperature}°C, Hum={humidity}%, Distance={distance}cm")
+
+            # Wait for a specified interval before the next read (e.g., 10 seconds)
+            time.sleep(10)
+
+        except Exception as e:
+            print(f"Error: {e}")
+            time.sleep(10)
+
+if __name__ == '__main__':
+    # Initialize the database
+    init_db()
+
+    # Start the sensor monitoring in a separate thread
+    sensor_thread = threading.Thread(target=monitor_sensors, daemon=True)
+    sensor_thread.start()
+
+    # Start the Flask REST API
+    app.run(debug=True, host="0.0.0.0")
