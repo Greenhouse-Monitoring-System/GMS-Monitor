@@ -83,6 +83,7 @@ def save_to_db(temperature, humidity, distance):
 
 # Sensor monitoring function
 def monitor_sensors():
+    global greenhouse_data
     gms = GMS()  # Initialize the GMS object
 
     while True:
