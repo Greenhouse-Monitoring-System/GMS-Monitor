@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5075bb4-0e50-487b-943c-ef8749c3188a" name="Changes" comment="Added the API output for air sensor and soil moisture" />
+    <list default="true" id="e5075bb4-0e50-487b-943c-ef8749c3188a" name="Changes" comment="Oops">
+      <change beforePath="$PROJECT_DIR$/gms.py" beforeDir="false" afterPath="$PROJECT_DIR$/gms.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -122,7 +124,23 @@
       <option name="project" value="LOCAL" />
       <updated>1736872379897</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added the API output for air sensor and soil moisture">
+      <option name="closed" value="true" />
+      <created>1736872440634</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1736872440634</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Oops">
+      <option name="closed" value="true" />
+      <created>1736872466083</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1736872466083</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -145,6 +163,7 @@
     <MESSAGE value="Bug in Thread Sensor Monitoring" />
     <MESSAGE value="Sensor JSON API" />
     <MESSAGE value="Added the API output for air sensor and soil moisture" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the API output for air sensor and soil moisture" />
+    <MESSAGE value="Oops" />
+    <option name="LAST_COMMIT_MESSAGE" value="Oops" />
   </component>
 </project>
