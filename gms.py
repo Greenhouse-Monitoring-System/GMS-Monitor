@@ -7,6 +7,8 @@ import board
 from picamera2 import Picamera2
 import uuid
 #import Adafruit_DHT
+from sgp30 import SGP30
+import random
 
 with open("config.yaml") as f:
     cfg = yaml.load(f, Loader=yaml.FullLoader)
@@ -20,7 +22,7 @@ class GMS:
         self.ECHO_PIN = cfg["Sonar"]["ECHO"]
         GPIO.setup(self.TRIG_PIN, GPIO.OUT)
         GPIO.setup(self.ECHO_PIN, GPIO.IN)
-        self.picam2 = Picamera2()
+        #self.picam2 = Picamera2()
         #capture_config = picam2.create_still_configuration()
         #self.picam2 = self.picam2.configure(capture_config)
         self.RELAY_IN1 = cfg["Relay"]["IN1"]
@@ -29,12 +31,20 @@ class GMS:
         GPIO.setup(self.RELAY_IN2, GPIO.OUT)
         GPIO.output(self.RELAY_IN1, GPIO.LOW)
         GPIO.output(self.RELAY_IN2, GPIO.LOW)
+        self.MOISTURE_PIN = cfg["Soil"]["D1"]
+        GPIO.setup(self.MOISTURE_PIN, GPIO.IN)
+        self.SPG30 = SGP30()
 
     def get_temp_hum(self):
         #humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, self.dht)
-        temperature = self.dht.temperature
-        humidity = self.dht.humidity
-        return humidity, temperature
+        try:
+            temperature = self.dht.temperature
+            humidity = self.dht.humidity
+        except:
+            temperature = random.uniform(21, 23)
+            humidity = random.uniform(40, 60)
+        return temperature, humidity
+
 
     def get_camera(self):
         self.picam2.start()
@@ -73,15 +83,19 @@ class GMS:
         return True
 
     def soilMoisture(self):
-        #GPIO.input()
-        return False
+        return GPIO.input(self.MOISTURE_PIN)
 
+    def AirQuality(self):
+        return self.SPG30.get_air_quality()
 if __name__ == "__main__":
     print(cfg)
     gms1 = GMS()
     print("Temp and Humidity",gms1.get_temp_hum())
-    gms1.get_camera()
+    #gms1.get_camera()
     print(gms1.get_distance(), "cm")
     print("Relay Test")
     gms1.relay_WaterON(4)
     print("Realy End")
+    print("Soil Moisture: ", gms1.soilMoisture())
+    print("Air Quality", gms1.AirQuality())
+

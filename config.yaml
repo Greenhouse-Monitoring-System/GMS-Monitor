@@ -9,4 +9,4 @@ Sonar:
   TRIG: 23
   ECHO: 24
 Soil:
-  DO:
+  D1: 21
