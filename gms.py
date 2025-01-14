@@ -41,8 +41,8 @@ class GMS:
             temperature = self.dht.temperature
             humidity = self.dht.humidity
         except:
-            temperature = random.uniform(21, 23)
-            humidity = random.uniform(40, 60)
+            temperature = round(random.uniform(21, 23), 2)
+            humidity = round(random.uniform(40, 42), 2)
         return temperature, humidity
 
     def get_camera(self):

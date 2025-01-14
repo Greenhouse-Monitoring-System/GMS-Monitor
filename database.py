@@ -1,6 +1,7 @@
 import sqlite3
 import time
 from gms import GMS
+from datetime import datetime
 
 # Database setup
 def init_db():
@@ -26,10 +27,12 @@ def init_db():
 def save_to_db(temperature, humidity, distance, soil_moisture, tvoc, co2):
     conn = sqlite3.connect("greenhouse.db")
     cursor = conn.cursor()
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     cursor.execute("""
     INSERT INTO sensor_data (timestamp, temperature, humidity, distance, soil_moisture, tvoc, co2)
-    VALUES (datetime('now'), ?, ?, ?, ?, ?, ?)
-    """, (temperature, humidity, distance, soil_moisture, tvoc, co2))
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (timestamp, temperature, humidity, distance, soil_moisture, tvoc, co2))
     conn.commit()
     conn.close()
 
