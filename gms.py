@@ -45,7 +45,6 @@ class GMS:
             humidity = random.uniform(40, 60)
         return temperature, humidity
 
-
     def get_camera(self):
         self.picam2.start()
         timestamp = time.strftime("%Y%m%d_%H%M%S")
@@ -71,9 +70,11 @@ class GMS:
         return distance
 
     def relay_WaterON(self, duration: int):
-        GPIO.output(self.RELAY_IN1, GPIO.LOW)
+        print("Water ON")
+        GPIO.output(self.RELAY_IN1, 1)
         time.sleep(duration)
-        GPIO.output(self.RELAY_IN1, GPIO.HIGH)
+        GPIO.output(self.RELAY_IN1, 0)
+        print("Water OFF")
         return True
 
     def relay_FanON(self, duration: int):
@@ -87,14 +88,14 @@ class GMS:
 
     def AirQuality(self):
         return self.SPG30.get_air_quality()
-# if __name__ == "__main__":
+if __name__ == "__main__":
 #     print(cfg)
-#     gms1 = GMS()
+      gms1 = GMS()
 #     print("Temp and Humidity",gms1.get_temp_hum())
 #     #gms1.get_camera()
 #     print(gms1.get_distance(), "cm")
 #     print("Relay Test")
-#     gms1.relay_WaterON(4)
+      gms1.relay_WaterON(4)
 #     print("Realy End")
 #     print("Soil Moisture: ", gms1.soilMoisture())
 #     print("Air Quality", gms1.AirQuality())
