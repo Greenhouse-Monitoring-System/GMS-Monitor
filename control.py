@@ -15,7 +15,8 @@ greenhouse_data = {
         "soil_moisture": 40,
         "light": 300,
         "soilMoisture": 1,
-        "AirQuality": ""
+        "tvoc": 0,
+        "co2": 0
     },
     "controls": {
         "water_pump": "OFF",
@@ -32,7 +33,7 @@ def get_sensor_data():
 
         # Query the latest sensor data
         cursor.execute("""
-        SELECT timestamp, temperature, humidity, distance, soil_moisture, air_quality 
+        SELECT timestamp, temperature, humidity, distance, soil_moisture, tvoc, co2 
         FROM sensor_data 
         ORDER BY id DESC LIMIT 1
         """)
@@ -40,14 +41,15 @@ def get_sensor_data():
         conn.close()
 
         if row:
-            timestamp, temperature, humidity, distance, soil_moisture, air_quality = row
+            timestamp, temperature, humidity, distance, soil_moisture, tvoc, co2 = row
             return jsonify({
                 "timestamp": timestamp,
                 "temperature": temperature,
                 "humidity": humidity,
                 "distance": distance,
                 "soilMoisture": soil_moisture,
-                "AirQuality": air_quality
+                "tvoc": tvoc,
+                "co2": co2
             }), 200
         else:
             return jsonify({"error": "No sensor data available"}), 404
@@ -90,7 +92,7 @@ def monitor_sensors():
     while True:
         try:
             # Get temperature and humidity
-            humidity, temperature = gms.get_temp_hum()
+            temperature, humidity = gms.get_temp_hum()
 
             # Get distance from sonar sensor
             distance = gms.get_distance()
@@ -100,12 +102,13 @@ def monitor_sensors():
 
             # Get air quality
             air_quality = gms.AirQuality()
+            tvoc, co2 = air_quality
 
             # Save data to the database
-            save_to_db(temperature, humidity, distance, soil_moisture, air_quality)
+            save_to_db(temperature, humidity, distance, soil_moisture, tvoc, co2)
 
             print(f"Saved: Temp={temperature}°C, Hum={humidity}%, Distance={distance}cm, "
-                  f"SoilMoisture={soil_moisture}, AirQuality={air_quality}")
+                  f"SoilMoisture={soil_moisture}, TVOC={tvoc}, CO2={co2}")
 
             # Wait for a specified interval before the next read (e.g., 10 seconds)
             time.sleep(10)

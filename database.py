@@ -15,20 +15,21 @@ def init_db():
             humidity REAL,
             distance REAL,
             soil_moisture INTEGER,
-            air_quality TEXT
+            tvoc REAL,
+            co2 REAL
         )
         """)
     conn.commit()
     conn.close()
 
 # Function to save data to the database
-def save_to_db(temperature, humidity, distance, soil_moisture, air_quality):
+def save_to_db(temperature, humidity, distance, soil_moisture, tvoc, co2):
     conn = sqlite3.connect("greenhouse.db")
     cursor = conn.cursor()
     cursor.execute("""
-    INSERT INTO sensor_data (timestamp, temperature, humidity, distance, soil_moisture, air_quality)
-    VALUES (datetime('now'), ?, ?, ?, ?, ?)
-    """, (temperature, humidity, distance, soil_moisture, air_quality))
+    INSERT INTO sensor_data (timestamp, temperature, humidity, distance, soil_moisture, tvoc, co2)
+    VALUES (datetime('now'), ?, ?, ?, ?, ?, ?)
+    """, (temperature, humidity, distance, soil_moisture, tvoc, co2))
     conn.commit()
     conn.close()
 

@@ -29,8 +29,8 @@ class GMS:
         self.RELAY_IN2 = cfg["Relay"]["IN2"]
         GPIO.setup(self.RELAY_IN1, GPIO.OUT)
         GPIO.setup(self.RELAY_IN2, GPIO.OUT)
-        GPIO.output(self.RELAY_IN1, GPIO.LOW)
-        GPIO.output(self.RELAY_IN2, GPIO.LOW)
+        GPIO.output(self.RELAY_IN1, GPIO.HIGH)
+        GPIO.output(self.RELAY_IN2, GPIO.HIGH)
         self.MOISTURE_PIN = cfg["Soil"]["D1"]
         GPIO.setup(self.MOISTURE_PIN, GPIO.IN)
         self.SPG30 = SGP30()
@@ -71,9 +71,9 @@ class GMS:
 
     def relay_WaterON(self, duration: int):
         print("Water ON")
-        GPIO.output(self.RELAY_IN1, 1)
-        time.sleep(duration)
         GPIO.output(self.RELAY_IN1, 0)
+        time.sleep(duration)
+        GPIO.output(self.RELAY_IN1, 1)
         print("Water OFF")
         return True
 
@@ -87,7 +87,8 @@ class GMS:
         return GPIO.input(self.MOISTURE_PIN)
 
     def AirQuality(self):
-        return self.SPG30.get_air_quality()
+        result = self.SPG30.get_air_quality()
+        return result.equivalent_co2, result.total_voc
 if __name__ == "__main__":
 #     print(cfg)
       gms1 = GMS()
@@ -98,5 +99,5 @@ if __name__ == "__main__":
       gms1.relay_WaterON(4)
 #     print("Realy End")
 #     print("Soil Moisture: ", gms1.soilMoisture())
-#     print("Air Quality", gms1.AirQuality())
+      print("Air Quality", gms1.AirQuality())
 
