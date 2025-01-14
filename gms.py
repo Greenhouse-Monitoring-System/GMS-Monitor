@@ -87,15 +87,15 @@ class GMS:
 
     def AirQuality(self):
         return self.SPG30.get_air_quality()
-if __name__ == "__main__":
-    print(cfg)
-    gms1 = GMS()
-    print("Temp and Humidity",gms1.get_temp_hum())
-    #gms1.get_camera()
-    print(gms1.get_distance(), "cm")
-    print("Relay Test")
-    gms1.relay_WaterON(4)
-    print("Realy End")
-    print("Soil Moisture: ", gms1.soilMoisture())
-    print("Air Quality", gms1.AirQuality())
+# if __name__ == "__main__":
+#     print(cfg)
+#     gms1 = GMS()
+#     print("Temp and Humidity",gms1.get_temp_hum())
+#     #gms1.get_camera()
+#     print(gms1.get_distance(), "cm")
+#     print("Relay Test")
+#     gms1.relay_WaterON(4)
+#     print("Realy End")
+#     print("Soil Moisture: ", gms1.soilMoisture())
+#     print("Air Quality", gms1.AirQuality())
 

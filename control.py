@@ -3,6 +3,7 @@ import threading
 import time
 from gms import GMS
 import sqlite3
+from control import *
 
 app = Flask(__name__)
 
@@ -13,6 +14,8 @@ greenhouse_data = {
         "humidity": 60,
         "soil_moisture": 40,
         "light": 300,
+        "soilMoisture": 1,
+        "AirQuality": ""
     },
     "controls": {
         "water_pump": "OFF",
@@ -29,7 +32,7 @@ def get_sensor_data():
 
         # Query the latest sensor data
         cursor.execute("""
-        SELECT timestamp, temperature, humidity, distance 
+        SELECT timestamp, temperature, humidity, distance, soil_moisture, air_quality 
         FROM sensor_data 
         ORDER BY id DESC LIMIT 1
         """)
@@ -37,12 +40,14 @@ def get_sensor_data():
         conn.close()
 
         if row:
-            timestamp, temperature, humidity, distance = row
+            timestamp, temperature, humidity, distance, soil_moisture, air_quality = row
             return jsonify({
                 "timestamp": timestamp,
                 "temperature": temperature,
                 "humidity": humidity,
-                "distance": distance
+                "distance": distance,
+                "soilMoisture": soil_moisture,
+                "AirQuality": air_quality
             }), 200
         else:
             return jsonify({"error": "No sensor data available"}), 404
@@ -77,34 +82,6 @@ def update_control(device_name):
 def ping():
     return jsonify({"message": "Greenhouse API is up and running!"}), 200
 
-# Database setup
-def init_db():
-    conn = sqlite3.connect("greenhouse.db")
-    cursor = conn.cursor()
-    # Create a table to store sensor data
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS sensor_data (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        timestamp TEXT NOT NULL,
-        temperature REAL,
-        humidity REAL,
-        distance REAL
-    )
-    """)
-    conn.commit()
-    conn.close()
-
-# Function to save data to the database
-def save_to_db(temperature, humidity, distance):
-    conn = sqlite3.connect("greenhouse.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-    INSERT INTO sensor_data (timestamp, temperature, humidity, distance)
-    VALUES (datetime('now'), ?, ?, ?)
-    """, (temperature, humidity, distance))
-    conn.commit()
-    conn.close()
-
 # Sensor monitoring function
 def monitor_sensors():
     global greenhouse_data
@@ -118,15 +95,17 @@ def monitor_sensors():
             # Get distance from sonar sensor
             distance = gms.get_distance()
 
+            # Get soil moisture
+            soil_moisture = gms.soilMoisture()
+
+            # Get air quality
+            air_quality = gms.AirQuality()
+
             # Save data to the database
-            save_to_db(temperature, humidity, distance)
+            save_to_db(temperature, humidity, distance, soil_moisture, air_quality)
 
-            # Update mock database for REST API
-            greenhouse_data['sensors']['temperature'] = temperature
-            greenhouse_data['sensors']['humidity'] = humidity
-            greenhouse_data['sensors']['distance'] = distance
-
-            print(f"Saved: Temp={temperature}°C, Hum={humidity}%, Distance={distance}cm")
+            print(f"Saved: Temp={temperature}°C, Hum={humidity}%, Distance={distance}cm, "
+                  f"SoilMoisture={soil_moisture}, AirQuality={air_quality}")
 
             # Wait for a specified interval before the next read (e.g., 10 seconds)
             time.sleep(10)
