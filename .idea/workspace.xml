@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5075bb4-0e50-487b-943c-ef8749c3188a" name="Changes" comment="Sensor JSON API">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gms.py" beforeDir="false" afterPath="$PROJECT_DIR$/gms.py" afterDir="false" />
-    </list>
+    <list default="true" id="e5075bb4-0e50-487b-943c-ef8749c3188a" name="Changes" comment="Added the API output for air sensor and soil moisture" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -118,7 +114,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736354923983</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Added the API output for air sensor and soil moisture">
+      <option name="closed" value="true" />
+      <created>1736872379897</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1736872379897</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -140,6 +144,7 @@
     <MESSAGE value="Control REST API" />
     <MESSAGE value="Bug in Thread Sensor Monitoring" />
     <MESSAGE value="Sensor JSON API" />
-    <option name="LAST_COMMIT_MESSAGE" value="Sensor JSON API" />
+    <MESSAGE value="Added the API output for air sensor and soil moisture" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the API output for air sensor and soil moisture" />
   </component>
 </project>

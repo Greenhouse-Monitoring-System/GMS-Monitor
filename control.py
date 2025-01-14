@@ -3,7 +3,7 @@ import threading
 import time
 from gms import GMS
 import sqlite3
-from control import *
+from control.py import *
 
 app = Flask(__name__)
 
