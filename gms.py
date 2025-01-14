@@ -87,7 +87,7 @@ class GMS:
 
     def AirQuality(self):
         return self.SPG30.get_air_quality()
-# if __name__ == "__main__":
+if __name__ == "__main__":
 #     print(cfg)
 #     gms1 = GMS()
 #     print("Temp and Humidity",gms1.get_temp_hum())
