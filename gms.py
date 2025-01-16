@@ -26,7 +26,9 @@ class GMS:
         #capture_config = picam2.create_still_configuration()
         #self.picam2 = self.picam2.configure(capture_config)
         self.RELAY_IN1 = cfg["Relay"]["IN1"]
+        self.__water_pump = False
         self.RELAY_IN2 = cfg["Relay"]["IN2"]
+        self.__vent = False
         GPIO.setup(self.RELAY_IN1, GPIO.OUT)
         GPIO.setup(self.RELAY_IN2, GPIO.OUT)
         GPIO.output(self.RELAY_IN1, GPIO.HIGH)
@@ -72,16 +74,36 @@ class GMS:
     def relay_WaterON(self, duration: int):
         print("Water ON")
         GPIO.output(self.RELAY_IN1, 0)
+        self.__water_pump = True
         time.sleep(duration)
         GPIO.output(self.RELAY_IN1, 1)
+        self.__water_pump = False
         print("Water OFF")
         return True
 
     def relay_FanON(self, duration: int):
         GPIO.output(self.RELAY_IN2, GPIO.LOW)
+        self.__vent = True
         time.sleep(duration)
         GPIO.output(self.RELAY_IN2, GPIO.HIGH)
+        self.__vent = False
         return True
+
+    def relay_Water_toggle(self):
+        if self.__water_pump:
+            GPIO.output(self.RELAY_IN1, 1)
+            self.__water_pump = False
+        else:
+            GPIO.output(self.RELAY_IN1, 0)
+            self.__water_pump = True
+
+    def relay_Fan_toggle(self):
+        if self.__vent:
+            GPIO.output(self.RELAY_IN2, GPIO.HIGH)
+            self.__vent = False
+        else:
+            GPIO.output(self.RELAY_IN2, GPIO.LOW)
+            self.__vent = True
 
     def soilMoisture(self):
         return GPIO.input(self.MOISTURE_PIN)

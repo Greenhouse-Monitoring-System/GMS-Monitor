@@ -6,6 +6,7 @@ import sqlite3
 from database import *
 
 app = Flask(__name__)
+gms = GMS()
 
 # Mock database for REST API
 greenhouse_data = {
@@ -73,9 +74,15 @@ def get_controls():
 # Route: Update control device state
 @app.route('/api/controls/<device_name>', methods=['PUT'])
 def update_control(device_name):
+    global gms
     if device_name in greenhouse_data['controls']:
         data = request.json
         greenhouse_data['controls'][device_name] = data.get('state', greenhouse_data['controls'][device_name])
+        print("New Job:", device_name, "Status:", greenhouse_data['controls'][device_name])
+        if device_name == "water_pump":
+            gms.relay_Water_toggle()
+        else:
+            gms.relay_Fan_toggle()
         return jsonify({device_name: greenhouse_data['controls'][device_name]}), 200
     return jsonify({"error": "Device not found"}), 404
 
@@ -86,8 +93,7 @@ def ping():
 
 # Sensor monitoring function
 def monitor_sensors():
-    global greenhouse_data
-    gms = GMS()  # Initialize the GMS object
+    global greenhouse_data, gms
 
     while True:
         try:
