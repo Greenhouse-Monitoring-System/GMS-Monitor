@@ -4,9 +4,13 @@ import time
 from gms import GMS
 import sqlite3
 from database import *
+import requests
+from datetime import datetime
 
 app = Flask(__name__)
 gms = GMS()
+url = "http://ip:8080/api/v1/API_KEY/telemetry"
+headers = {"Content-Type": "application/json"}
 
 # Mock database for REST API
 greenhouse_data = {
@@ -112,7 +116,17 @@ def monitor_sensors():
 
             # Save data to the database
             save_to_db(temperature, humidity, distance, soil_moisture, tvoc, co2)
-
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            data_json = {
+                "timestamp": timestamp,
+                "temperature": temperature,
+                "humidity": humidity,
+                "distance": distance,
+                "soilMoisture": soil_moisture,
+                "tvoc": tvoc,
+                "co2": co2
+            }
+            response = requests.post(url, headers=headers, json=data_json)
             print(f"Saved: Temp={temperature}°C, Hum={humidity}%, Distance={distance}cm, "
                   f"SoilMoisture={soil_moisture}, TVOC={tvoc}, CO2={co2}")
 
